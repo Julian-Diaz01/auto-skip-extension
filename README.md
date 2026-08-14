@@ -1,4 +1,4 @@
-# Auto Skip
+# Bunny Skip
 
 A Chrome extension (Manifest V3) that automatically clicks "Skip Intro," "Skip Recap," and "Next Episode" buttons on streaming sites (Netflix, Prime Video, Disney+). Rules that describe which button to click are stored as **data** — never as hardcoded per-site JS — so a broken rule can be fixed by picking the button again, no DevTools required.
 
@@ -17,7 +17,7 @@ It has no backend and makes no network calls beyond loading the pages you alread
 1. Open `chrome://extensions`.
 2. Enable **Developer mode** (top-right toggle).
 3. Click **Load unpacked**.
-4. Select this folder (`auto-skip-extension`).
+4. Select this folder (`bunny-skip-extension`).
 5. Confirm it installs with no errors and the toolbar icon appears.
 
 On first install, three Netflix rules are seeded automatically (Skip Intro, Skip Recap, Next Episode) — see [Seed rules](#seed-rules) below.

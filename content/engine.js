@@ -18,7 +18,7 @@ const RESCAN_DEBOUNCE_MS = 200;
 
 function log(...args) {
   if (DEBUG) {
-    console.debug('[auto-skip]', ...args);
+    console.debug('[bunny-skip]', ...args);
   }
 }
 

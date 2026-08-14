@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Auto Skip",
+  "name": "Bunny Skip",
   "version": "1.0.0",
   "description": "Automatically clicks Skip Intro, Skip Recap, and Next Episode on streaming platforms, with fully editable rules.",
   "permissions": ["storage", "activeTab", "scripting"],

@@ -28,9 +28,9 @@ chrome.runtime.onInstalled.addListener(async (details) => {
     }));
 
     await RulesStore.saveRules(rulesWithIds);
-    console.debug('[auto-skip] Seeded default rules:', rulesWithIds.length);
+    console.debug('[bunny-skip] Seeded default rules:', rulesWithIds.length);
   } catch (err) {
-    console.error('[auto-skip] Failed to seed default rules:', err);
+    console.error('[bunny-skip] Failed to seed default rules:', err);
   }
 });
 
@@ -48,7 +48,7 @@ chrome.runtime.onMessage.addListener((message) => {
   }
   if (message.type === 'picker-result') {
     handlePickerResult(message).catch((err) => {
-      console.error('[auto-skip] Failed to auto-save picked rule:', err);
+      console.error('[bunny-skip] Failed to auto-save picked rule:', err);
     });
   } else if (message.type === 'picker-cancelled') {
     chrome.action.setBadgeText({ text: '' });

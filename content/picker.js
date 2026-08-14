@@ -10,12 +10,12 @@
 (function () {
   'use strict';
 
-  if (window.__autoSkipPickerActive) {
+  if (window.__bunnySkipPickerActive) {
     // Picker already active from a previous invocation (e.g. user double
     // clicked the "Pick element" button) — don't stack listeners.
     return;
   }
-  window.__autoSkipPickerActive = true;
+  window.__bunnySkipPickerActive = true;
 
   var HOVER_OUTLINE = '2px solid #d1466f';
   var HOVER_OUTLINE_OFFSET = '-2px';
@@ -183,7 +183,7 @@
     document.removeEventListener('click', onClick, true);
     document.removeEventListener('keydown', onKeyDown, true);
     restoreOutline();
-    window.__autoSkipPickerActive = false;
+    window.__bunnySkipPickerActive = false;
   }
 
   function onClick(event) {
