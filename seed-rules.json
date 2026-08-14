@@ -1,0 +1,31 @@
+[
+  {
+    "site": "netflix.com",
+    "label": "Skip Intro",
+    "matchType": "data-attribute",
+    "dataAttrName": "data-uia",
+    "matchValue": "player-skip-intro",
+    "action": "click",
+    "enabled": true,
+    "source": "seed"
+  },
+  {
+    "site": "netflix.com",
+    "label": "Skip Recap",
+    "matchType": "aria-label",
+    "matchValue": "Skip Recap",
+    "action": "click",
+    "enabled": true,
+    "source": "seed"
+  },
+  {
+    "site": "netflix.com",
+    "label": "Next Episode",
+    "matchType": "data-attribute",
+    "dataAttrName": "data-uia",
+    "matchValue": "next-episode-seamless-button",
+    "action": "click",
+    "enabled": true,
+    "source": "seed"
+  }
+]

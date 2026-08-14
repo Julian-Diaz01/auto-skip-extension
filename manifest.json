@@ -1,0 +1,40 @@
+{
+  "manifest_version": 3,
+  "name": "Auto Skip",
+  "version": "1.0.0",
+  "description": "Automatically clicks Skip Intro, Skip Recap, and Next Episode buttons on streaming sites using user-editable rules (personal use, unpacked extension).",
+  "permissions": ["storage", "activeTab", "scripting"],
+  "host_permissions": [
+    "*://*.netflix.com/*",
+    "*://*.primevideo.com/*",
+    "*://*.disneyplus.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.netflix.com/*",
+        "*://*.primevideo.com/*",
+        "*://*.disneyplus.com/*"
+      ],
+      "js": ["storage/rules-store.js", "content/engine.js"],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ],
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "background": {
+    "service_worker": "background.js"
+  }
+}
