@@ -42,4 +42,4 @@ If Auto Skip's data practices ever change, this policy will be updated and the e
 
 ## Contact
 
-Questions about this policy can be sent to [YOUR CONTACT EMAIL].
+Questions about this policy can be sent to gugan.diaz+info@gmail.com.
