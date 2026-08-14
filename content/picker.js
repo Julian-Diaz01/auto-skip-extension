@@ -17,7 +17,7 @@
   }
   window.__autoSkipPickerActive = true;
 
-  var HOVER_OUTLINE = '2px solid #6366f1';
+  var HOVER_OUTLINE = '2px solid #d1466f';
   var HOVER_OUTLINE_OFFSET = '-2px';
 
   var hoveredEl = null;
