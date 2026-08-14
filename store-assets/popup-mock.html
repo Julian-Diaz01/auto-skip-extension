@@ -9,6 +9,18 @@
        box (the real Chrome popup window size) — keep that untouched so the
        capture is pixel-accurate to what a user actually sees. */
     html { background: transparent; }
+
+    /* Screenshot-harness only: CSS transitions (e.g. the nav tab's
+       background-color fade) don't advance while a tab is backgrounded,
+       which is exactly the state an automated screenshot capture runs in
+       — so a transitioned property can get stuck showing its pre-click
+       value even though the class/content change already applied.
+       Disabling transitions/animations here makes captures deterministic
+       without touching the real popup.css a user actually sees. */
+    *, *::before, *::after {
+      transition: none !important;
+      animation: none !important;
+    }
   </style>
 </head>
 <body>

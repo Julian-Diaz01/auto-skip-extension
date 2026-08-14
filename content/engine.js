@@ -8,7 +8,7 @@
 // this file only ever reads rule fields to build CSS selector strings or
 // to do plain string comparisons.
 
-const DEBUG = true;
+const DEBUG = false;
 
 // Module-level state.
 let activeRules = [];

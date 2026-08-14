@@ -58,7 +58,7 @@ On first install, three Netflix rules are seeded automatically (Skip Intro, Skip
 
 Netflix ships with three seed rules out of the box (`seed-rules.json`), since its `data-uia` attributes are the most stable of the three supported sites:
 
-- Skip Intro (`aria-label`)
+- Skip Intro (`data-attribute`, `data-uia="player-skip-intro"`)
 - Skip Recap (`aria-label`)
 - Next Episode (`data-attribute`, `data-uia="next-episode-seamless-button"`)
 
