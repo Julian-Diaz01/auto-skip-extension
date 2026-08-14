@@ -1,8 +1,8 @@
 # Auto Skip
 
-A personal-use Chrome extension (Manifest V3) that automatically clicks "Skip Intro," "Skip Recap," and "Next Episode" buttons on streaming sites (Netflix, Prime Video, Disney+). Rules that describe which button to click are stored as **data** — never as hardcoded per-site JS — so a broken rule can be fixed by picking the button again, no DevTools required.
+A Chrome extension (Manifest V3) that automatically clicks "Skip Intro," "Skip Recap," and "Next Episode" buttons on streaming sites (Netflix, Prime Video, Disney+). Rules that describe which button to click are stored as **data** — never as hardcoded per-site JS — so a broken rule can be fixed by picking the button again, no DevTools required.
 
-This is loaded as an unpacked extension via Chrome Developer Mode. It is not published to the Chrome Web Store, has no backend, and makes no network calls beyond loading the pages you already visit.
+It has no backend and makes no network calls beyond loading the pages you already visit — see [`PRIVACY_POLICY.md`](PRIVACY_POLICY.md) for the full data-handling breakdown. It's currently installed as an unpacked extension via Chrome Developer Mode; see [`CHROME_STORE_PUBLISHING.md`](CHROME_STORE_PUBLISHING.md) for the checklist to publish it to the Chrome Web Store.
 
 ## What it does — and doesn't do
 

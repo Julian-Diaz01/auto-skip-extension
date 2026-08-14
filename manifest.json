@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Auto Skip",
   "version": "1.0.0",
-  "description": "Automatically clicks Skip Intro, Skip Recap, and Next Episode buttons on streaming sites using user-editable rules (personal use, unpacked extension).",
+  "description": "Automatically clicks Skip Intro, Skip Recap, and Next Episode buttons on Netflix, Prime Video, and Disney+. Rules are fully editable — no coding required.",
   "permissions": ["storage", "activeTab", "scripting"],
   "host_permissions": [
     "*://*.netflix.com/*",
