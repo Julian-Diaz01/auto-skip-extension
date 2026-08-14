@@ -288,6 +288,15 @@
   }
 
   function renderOtherSites(rulesBySite) {
+    // renderAll() re-runs on every state change (toggling a rule, renaming,
+    // deleting, ...), and this rebuilds the site-group <details> elements
+    // from scratch each time. Remember which ones the user had open first
+    // so a toggle flip elsewhere doesn't slam every accordion shut.
+    const openSites = new Set();
+    otherSitesRulesEl.querySelectorAll('details.site-group[open]').forEach((el) => {
+      if (el.dataset.site) openSites.add(el.dataset.site);
+    });
+
     otherSitesRulesEl.innerHTML = '';
 
     if (rulesBySite.size === 0) {
@@ -302,6 +311,8 @@
     for (const site of sortedSites) {
       const group = document.createElement('details');
       group.className = 'site-group';
+      group.dataset.site = site;
+      group.open = openSites.has(site);
 
       const summary = document.createElement('summary');
       summary.className = 'site-group-name';
