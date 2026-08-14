@@ -42,4 +42,4 @@ If Bunny Skip's data practices ever change, this policy will be updated and the 
 
 ## Contact
 
-Questions about this policy can be sent to gugan.diaz+info@gmail.com.
+Questions about this policy can be sent to info@konnektaro.com.
