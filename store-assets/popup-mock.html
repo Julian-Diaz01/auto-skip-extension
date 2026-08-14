@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Auto Skip</title>
+  <link rel="stylesheet" href="../popup/popup.css" />
+  <style>
+    /* Screenshot-harness only: real popup.css sets body to a fixed 600x480
+       box (the real Chrome popup window size) — keep that untouched so the
+       capture is pixel-accurate to what a user actually sees. */
+    html { background: transparent; }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <nav class="sidebar" aria-label="Sections">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <img src="../icons/icon48.png" alt="" width="20" height="20" />
+        </span>
+        <span class="brand-title">Auto Skip</span>
+      </div>
+
+      <div class="nav-list" role="tablist" aria-orientation="vertical">
+        <button type="button" class="nav-item active" id="nav-current-site" role="tab" aria-selected="true" aria-controls="panel-current-site">
+          <svg class="nav-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 21s7-6.4 7-11.5A7 7 0 0 0 5 9.5C5 14.6 12 21 12 21z" />
+            <circle cx="12" cy="9.5" r="2.3" />
+          </svg>
+          <span>This Site</span>
+        </button>
+        <button type="button" class="nav-item" id="nav-other-sites" role="tab" aria-selected="false" aria-controls="panel-other-sites">
+          <svg class="nav-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="3" width="7" height="7" rx="1.5" />
+            <rect x="14" y="3" width="7" height="7" rx="1.5" />
+            <rect x="3" y="14" width="7" height="7" rx="1.5" />
+            <rect x="14" y="14" width="7" height="7" rx="1.5" />
+          </svg>
+          <span>Other Sites</span>
+        </button>
+        <button type="button" class="nav-item" id="nav-add-rule" role="tab" aria-selected="false" aria-controls="panel-add-rule">
+          <svg class="nav-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 5v14M5 12h14" />
+          </svg>
+          <span>Add Rule</span>
+        </button>
+        <button type="button" class="nav-item" id="nav-help" role="tab" aria-selected="false" aria-controls="panel-help">
+          <svg class="nav-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="9" />
+            <path d="M9.5 9.2a2.5 2.5 0 0 1 4.9.8c0 1.7-2.4 2-2.4 3.5" />
+            <path d="M12 17h.01" />
+          </svg>
+          <span>Help</span>
+        </button>
+        <button type="button" class="nav-item" id="nav-about" role="tab" aria-selected="false" aria-controls="panel-about">
+          <svg class="nav-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 21s-7.5-4.9-10-9.6C.4 7.7 2 4 5.6 3.3c2-.4 4 .5 5.2 2.3l1.2 1.7 1.2-1.7c1.2-1.8 3.2-2.7 5.2-2.3C22 4 23.6 7.7 22 11.4 19.5 16.1 12 21 12 21z" />
+          </svg>
+          <span>About</span>
+        </button>
+      </div>
+    </nav>
+
+    <main class="content">
+      <section id="panel-current-site" class="panel active" role="tabpanel" aria-labelledby="nav-current-site">
+        <h2 id="current-site-heading" class="panel-title">Rules for this site</h2>
+        <button type="button" id="add-rule-shortcut-btn" class="primary-btn">
+          <svg class="btn-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 4l7.07 17 2.51-7.39L21 11.07z" />
+          </svg>
+          Select the button to skip
+        </button>
+        <div id="current-site-rules" class="rule-list">
+          <p class="empty-state">Loading&hellip;</p>
+        </div>
+      </section>
+
+      <section id="panel-other-sites" class="panel" role="tabpanel" aria-labelledby="nav-other-sites" hidden>
+        <h2 class="panel-title">All other sites</h2>
+        <div id="other-sites-rules" class="rule-list">
+          <p class="empty-state">Loading&hellip;</p>
+        </div>
+      </section>
+
+      <section id="panel-add-rule" class="panel" role="tabpanel" aria-labelledby="nav-add-rule" hidden>
+        <h2 id="form-heading" class="panel-title">Add a skip rule</h2>
+
+        <div id="picker-slot">
+          <div class="picker-cta-row">
+            <button type="button" id="pick-element-btn" class="primary-btn">
+              <svg class="btn-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M4 4l7.07 17 2.51-7.39L21 11.07z" />
+              </svg>
+              Select the button to skip
+            </button>
+
+            <span class="info-tooltip-wrap">
+              <button type="button" class="info-btn" id="picker-help-btn" aria-expanded="false" aria-controls="picker-help-tip">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="9" />
+                  <path d="M12 16v-5" />
+                  <path d="M12 8h.01" />
+                </svg>
+                <span class="sr-only">How this works</span>
+              </button>
+              <div class="tooltip" id="picker-help-tip" role="tooltip" hidden>
+                <p class="tooltip-title">How it works</p>
+                <ol class="tooltip-steps">
+                  <li>Click "Select the button to skip".</li>
+                  <li>Click the button on the page (e.g. the Skip Intro button).</li>
+                  <li>We auto-detect the most reliable match and save the rule for you — or, if "Choose match manually" below is on, show every match so you can pick.</li>
+                </ol>
+              </div>
+            </span>
+          </div>
+
+          <p id="picker-status" class="picker-status" role="status" aria-live="polite" hidden></p>
+          <div id="picker-candidates" hidden></div>
+        </div>
+
+        <details id="advanced-section" class="advanced-disclosure">
+          <summary>
+            <span class="disclosure-arrow" aria-hidden="true"></span>
+            <span>Advanced: enter manually</span>
+
+            <span class="info-tooltip-wrap">
+              <button type="button" class="info-btn" id="advanced-help-btn" aria-expanded="false" aria-controls="advanced-help-tip">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="9" />
+                  <path d="M12 16v-5" />
+                  <path d="M12 8h.01" />
+                </svg>
+                <span class="sr-only">When to use this</span>
+              </button>
+              <div class="tooltip" id="advanced-help-tip" role="tooltip" hidden>
+                <p class="tooltip-title">When you need this</p>
+                <p class="tooltip-body">Only if the picker above can't find the button, or you want to fine-tune the match. Right-click the button on the page &rarr; Inspect to find its attributes.</p>
+              </div>
+            </span>
+          </summary>
+
+          <div class="advanced-toggle-row">
+            <label class="switch-label" for="manual-select-toggle">
+              <span class="switch-text">
+                <span class="switch-title">Choose match manually</span>
+                <span class="switch-desc">When picking an element on the page, show every match we found so you can pick — instead of saving the best one automatically.</span>
+              </span>
+              <span class="switch">
+                <input type="checkbox" id="manual-select-toggle" />
+                <span class="switch-track" aria-hidden="true"><span class="switch-thumb"></span></span>
+              </span>
+            </label>
+          </div>
+
+          <form id="rule-form">
+            <input type="hidden" id="rule-id" value="" />
+
+            <label for="field-site">
+              Site
+              <input type="text" id="field-site" name="site" placeholder="netflix.com" required aria-describedby="field-site-error" />
+            </label>
+            <p class="field-error" id="field-site-error" hidden></p>
+
+            <label for="field-label">
+              Label
+              <input type="text" id="field-label" name="label" placeholder="Skip Intro" required aria-describedby="field-label-error" />
+            </label>
+            <p class="field-error" id="field-label-error" hidden></p>
+
+            <label for="field-matchType">
+              Match type
+              <select id="field-matchType" name="matchType" required>
+                <option value="aria-label">aria-label</option>
+                <option value="text">text</option>
+                <option value="css-selector">css-selector</option>
+                <option value="data-attribute">data-attribute</option>
+              </select>
+            </label>
+
+            <label for="field-matchValue">
+              Match value
+              <input type="text" id="field-matchValue" name="matchValue" placeholder="Skip Intro" required aria-describedby="field-matchValue-error" />
+            </label>
+            <p class="field-error" id="field-matchValue-error" hidden></p>
+
+            <label for="field-dataAttrName" id="field-dataAttrName-label">
+              Data attribute name
+              <input type="text" id="field-dataAttrName" name="dataAttrName" placeholder="data-uia" />
+            </label>
+
+            <div class="form-actions">
+              <button type="submit" id="form-submit-btn">Add rule</button>
+              <button type="button" id="form-cancel-btn" hidden>Cancel</button>
+            </div>
+          </form>
+        </details>
+      </section>
+
+      <section id="panel-help" class="panel" role="tabpanel" aria-labelledby="nav-help" hidden>
+        <h2 class="panel-title">Help</h2>
+
+        <div class="help-block">
+          <h3 class="help-heading">Adding a rule automatically</h3>
+          <ol class="help-steps">
+            <li>Go to <strong>Add Rule</strong> and click <strong>Select the button to skip</strong>.</li>
+            <li>On the page, click the button you want auto-skipped (e.g. Skip Intro).</li>
+            <li>By default we detect the most reliable match and save the rule right away — reopen the popup to see a confirmation and any alternative matches.</li>
+          </ol>
+        </div>
+
+        <div class="help-block">
+          <h3 class="help-heading">Choosing the match yourself</h3>
+          <p class="help-text">Open <strong>Advanced: enter manually</strong> in Add Rule and turn on <strong>Choose match manually</strong>. Step 3 above then changes: instead of auto-saving, we show every match found on the page so you can pick the one you want.</p>
+        </div>
+
+        <div class="help-block">
+          <h3 class="help-heading">Match types</h3>
+          <div id="help-match-types" class="help-match-types"></div>
+        </div>
+
+        <div class="help-block">
+          <h3 class="help-heading">Entering a rule manually</h3>
+          <p class="help-text">If the picker can't find the button, open <strong>Advanced: enter manually</strong> and fill in the site, a label, a match type, and the value to match. Right-click the button on the page &rarr; Inspect to find its attributes.</p>
+        </div>
+
+        <div class="help-block">
+          <h3 class="help-heading">Managing rules</h3>
+          <p class="help-text">Use the checkbox on a rule to enable or disable it, the pencil icon to rename it, <strong>Edit details</strong> to change its match, or <strong>Delete</strong> to remove it.</p>
+        </div>
+      </section>
+
+      <section id="panel-about" class="panel" role="tabpanel" aria-labelledby="nav-about" hidden>
+        <h2 class="panel-title">About</h2>
+
+        <div class="help-block">
+          <h3 class="help-heading">Made by Julian Diaz</h3>
+          <p class="help-text">Hey, I'm Julian &mdash; an indie developer who got tired of clicking "Skip Intro" one too many times. Auto Skip is free and open source, built to just work and stay out of your way.</p>
+        </div>
+
+        <div class="about-links">
+          <a class="primary-btn" href="https://www.buymeacoffee.com/julian.diaz" target="_blank" rel="noopener noreferrer">
+            <svg class="btn-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M18 8h1a4 4 0 0 1 0 8h-1" />
+              <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4Z" />
+              <line x1="6" y1="2" x2="6" y2="4" />
+              <line x1="10" y1="2" x2="10" y2="4" />
+              <line x1="14" y1="2" x2="14" y2="4" />
+            </svg>
+            Support me on Buy Me a Coffee
+          </a>
+
+          <a class="about-secondary-link" href="https://github.com/Julian-Diaz01" target="_blank" rel="noopener noreferrer">
+            <svg class="btn-icon" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+              <path d="M12 .5a12 12 0 0 0-3.79 23.4c.6.11.82-.26.82-.58v-2.02c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.84 2.8 1.31 3.49 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6.02 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12 12 0 0 0 12 .5z" />
+            </svg>
+            github.com/Julian-Diaz01
+          </a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // --- Screenshot-harness-only chrome.* shim -------------------------
+    // Backs the real popup.js/rules-store.js with an in-memory store so
+    // the *actual* extension UI code renders real screenshots — nothing
+    // about the popup markup, CSS, or JS below this point is faked.
+    (function () {
+      const store = {
+        rules: [
+          { id: 'r1', site: 'netflix.com', label: 'Skip Intro', matchType: 'data-attribute', dataAttrName: 'data-uia', matchValue: 'player-skip-intro', action: 'click', enabled: true, source: 'seed', createdAt: '2026-07-01T12:00:00.000Z' },
+          { id: 'r2', site: 'netflix.com', label: 'Skip Recap', matchType: 'aria-label', matchValue: 'Skip Recap', action: 'click', enabled: true, source: 'seed', createdAt: '2026-07-01T12:00:00.000Z' },
+          { id: 'r3', site: 'netflix.com', label: 'Next Episode', matchType: 'data-attribute', dataAttrName: 'data-uia', matchValue: 'next-episode-seamless-button', action: 'click', enabled: true, source: 'seed', createdAt: '2026-07-01T12:00:00.000Z' },
+          { id: 'r4', site: 'primevideo.com', label: 'Skip Intro', matchType: 'text', matchValue: 'Skip Intro', action: 'click', enabled: true, source: 'picker', createdAt: '2026-07-14T09:30:00.000Z' },
+          { id: 'r5', site: 'disneyplus.com', label: 'Skip Recap', matchType: 'aria-label', matchValue: 'Skip Recap', action: 'click', enabled: false, source: 'manual', createdAt: '2026-07-20T18:15:00.000Z' },
+        ],
+      };
+
+      function isPromiseCall(cb) {
+        return typeof cb !== 'function';
+      }
+
+      window.chrome = {
+        runtime: {
+          lastError: undefined,
+          onMessage: { addListener: function () {} },
+        },
+        tabs: {
+          query: function () {
+            return Promise.resolve([{ id: 1, url: 'https://www.netflix.com/watch/81234567' }]);
+          },
+        },
+        action: {
+          setBadgeText: function () {},
+        },
+        scripting: {
+          executeScript: function () {
+            return Promise.resolve([]);
+          },
+        },
+        storage: {
+          local: {
+            get: function (keys, cb) {
+              const result = {};
+              const keyList = Array.isArray(keys) ? keys : typeof keys === 'string' ? [keys] : Object.keys(store);
+              keyList.forEach((k) => {
+                if (k in store) result[k] = store[k];
+              });
+              if (!isPromiseCall(cb)) {
+                setTimeout(() => cb(result), 0);
+                return undefined;
+              }
+              return Promise.resolve(result);
+            },
+            set: function (obj, cb) {
+              Object.assign(store, obj);
+              if (!isPromiseCall(cb)) {
+                setTimeout(() => cb(), 0);
+                return undefined;
+              }
+              return Promise.resolve();
+            },
+            remove: function (keys, cb) {
+              const keyList = Array.isArray(keys) ? keys : [keys];
+              keyList.forEach((k) => delete store[k]);
+              if (!isPromiseCall(cb)) {
+                setTimeout(() => cb(), 0);
+                return undefined;
+              }
+              return Promise.resolve();
+            },
+          },
+        },
+      };
+    })();
+  </script>
+  <script src="../storage/rules-store.js"></script>
+  <script src="../popup/popup.js"></script>
+  <script>
+    // Screenshot-harness-only: jump to the panel requested via ?panel=,
+    // exercising the same click handlers a real user triggers.
+    (function () {
+      const panel = new URLSearchParams(location.search).get('panel');
+      const expandAdvanced = new URLSearchParams(location.search).get('advanced') === '1';
+      window.addEventListener('load', () => {
+        setTimeout(() => {
+          if (panel === 'other-sites') {
+            document.getElementById('nav-other-sites').click();
+          } else if (panel === 'add-rule') {
+            document.getElementById('nav-add-rule').click();
+            if (expandAdvanced) {
+              document.getElementById('advanced-section').open = true;
+            }
+          }
+        }, 50);
+      });
+    })();
+  </script>
+</body>
+</html>
