@@ -1,20 +1,28 @@
 {
   "manifest_version": 3,
   "name": "Bunny Skip",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Automatically clicks Skip Intro, Skip Recap, and Next Episode on streaming platforms, with fully editable rules.",
   "permissions": ["storage", "activeTab", "scripting"],
   "host_permissions": [
     "*://*.netflix.com/*",
     "*://*.primevideo.com/*",
-    "*://*.disneyplus.com/*"
+    "*://*.disneyplus.com/*",
+    "*://*.hulu.com/*",
+    "*://*.max.com/*",
+    "*://tv.apple.com/*",
+    "*://*.paramountplus.com/*"
   ],
   "content_scripts": [
     {
       "matches": [
         "*://*.netflix.com/*",
         "*://*.primevideo.com/*",
-        "*://*.disneyplus.com/*"
+        "*://*.disneyplus.com/*",
+        "*://*.hulu.com/*",
+        "*://*.max.com/*",
+        "*://tv.apple.com/*",
+        "*://*.paramountplus.com/*"
       ],
       "js": ["storage/rules-store.js", "content/engine.js"],
       "run_at": "document_idle",

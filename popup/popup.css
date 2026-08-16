@@ -922,6 +922,14 @@ form#rule-form select {
   transition: border-color 150ms ease-out, box-shadow 150ms ease-out;
 }
 
+/* The native option list can't inherit the select's translucent glass
+   background (no backdrop-filter support there), so give it an opaque
+   fallback in the same palette to keep text legible. */
+form#rule-form select option {
+  background-color: var(--bg-2);
+  color: var(--fg);
+}
+
 .form-actions {
   display: flex;
   gap: 8px;

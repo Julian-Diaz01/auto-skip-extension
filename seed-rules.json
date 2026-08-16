@@ -27,5 +27,15 @@
     "action": "click",
     "enabled": true,
     "source": "seed"
+  },
+  {
+    "site": "tv.apple.com",
+    "label": "Skip",
+    "matchType": "data-attribute",
+    "dataAttrName": "data-testid",
+    "matchValue": "skip-overlay-button-skip-button",
+    "action": "click",
+    "enabled": true,
+    "source": "seed"
   }
 ]

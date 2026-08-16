@@ -2,7 +2,7 @@
 
 **Last updated:** 2026-08-14
 
-Bunny Skip is a browser extension that automatically clicks "Skip Intro," "Skip Recap," and "Next Episode" buttons on supported streaming sites (Netflix, Prime Video, Disney+).
+Bunny Skip is a browser extension that automatically clicks "Skip Intro," "Skip Recap," and "Next Episode" buttons on supported streaming sites (Netflix, Prime Video, Disney+, Hulu, Max, Apple TV+, Paramount+).
 
 ## Data collection
 
@@ -30,7 +30,7 @@ This data:
 | `storage` | Save your skip rules locally in `chrome.storage.local`. |
 | `activeTab` | Let the popup's element picker inspect the page you're currently viewing, only when you invoke it. |
 | `scripting` | Inject the element-picker script on demand when you click "Pick element on page." |
-| Host permissions for `netflix.com`, `primevideo.com`, `disneyplus.com` | Run the content script that watches for and clicks Skip Intro / Skip Recap / Next Episode buttons on those sites. Bunny Skip cannot see or run on any other site. |
+| Host permissions for `netflix.com`, `primevideo.com`, `disneyplus.com`, `hulu.com`, `max.com`, `tv.apple.com`, `paramountplus.com` | Run the content script that watches for and clicks Skip Intro / Skip Recap / Next Episode buttons on those sites. Bunny Skip cannot see or run on any other site. |
 
 ## Third parties
 
