@@ -1,6 +1,6 @@
 # Bunny Skip
 
-A Chrome extension (Manifest V3) that automatically clicks "Skip Intro," "Skip Recap," and "Next Episode" buttons on streaming sites (Netflix, Prime Video, Disney+). Rules that describe which button to click are stored as **data** — never as hardcoded per-site JS — so a broken rule can be fixed by picking the button again, no DevTools required.
+A Chrome extension (Manifest V3) that automatically clicks "Skip Intro," "Skip Recap," and "Next Episode" buttons on streaming sites (Netflix, Prime Video, Disney+, Hulu, Max, Apple TV+, Paramount+). Rules that describe which button to click are stored as **data** — never as hardcoded per-site JS — so a broken rule can be fixed by picking the button again, no DevTools required.
 
 It has no backend and makes no network calls beyond loading the pages you already visit — see [`PRIVACY_POLICY.md`](PRIVACY_POLICY.md) for the full data-handling breakdown. It's currently installed as an unpacked extension via Chrome Developer Mode; see [`CHROME_STORE_PUBLISHING.md`](CHROME_STORE_PUBLISHING.md) for the checklist to publish it to the Chrome Web Store.
 
@@ -56,13 +56,13 @@ On first install, three Netflix rules are seeded automatically (Skip Intro, Skip
 
 ## Seed rules
 
-Netflix ships with three seed rules out of the box (`seed-rules.json`), since its `data-uia` attributes are the most stable of the three supported sites:
+Netflix ships with three seed rules out of the box (`seed-rules.json`), since its `data-uia` attributes are the most stable of the supported sites:
 
 - Skip Intro (`data-attribute`, `data-uia="player-skip-intro"`)
 - Skip Recap (`aria-label`)
 - Next Episode (`data-attribute`, `data-uia="next-episode-seamless-button"`)
 
-**Prime Video and Disney+ ship with no seed rules.** Their selectors are less stable than Netflix's, so rather than guessing brittle values that would break silently, capture them yourself with the picker: open a title on that site, click the toolbar icon → "Pick element on page," then click the site's actual Skip Intro / Next Episode button. Review the proposed candidates, adjust the label if you want, and save.
+**Every other supported site (Prime Video, Disney+, Hulu, Max, Apple TV+, Paramount+) ships with no seed rules.** Their selectors are less stable than Netflix's, so rather than guessing brittle values that would break silently, capture them yourself with the picker: open a title on that site, click the toolbar icon → "Pick element on page," then click the site's actual Skip Intro / Next Episode button. Review the proposed candidates, adjust the label if you want, and save.
 
 ## Adding support for a new site
 
