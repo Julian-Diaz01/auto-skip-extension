@@ -2,7 +2,7 @@
 
 A Chrome extension (Manifest V3) that automatically clicks "Skip Intro," "Skip Recap," and "Next Episode" buttons on streaming sites (Netflix, Prime Video, Disney+, Hulu, Max, Apple TV+, Paramount+). Rules that describe which button to click are stored as **data** — never as hardcoded per-site JS — so a broken rule can be fixed by picking the button again, no DevTools required.
 
-It has no backend and makes no network calls beyond loading the pages you already visit — see [`PRIVACY_POLICY.md`](PRIVACY_POLICY.md) for the full data-handling breakdown. It's currently installed as an unpacked extension via Chrome Developer Mode; see [`CHROME_STORE_PUBLISHING.md`](CHROME_STORE_PUBLISHING.md) for the checklist to publish it to the Chrome Web Store.
+It has no backend and makes no network calls beyond loading the pages you already visit — see [`PRIVACY_POLICY.md`](PRIVACY_POLICY.md) for the full data-handling breakdown. It's currently installed as an unpacked extension via Chrome Developer Mode.
 
 ## What it does — and doesn't do
 
