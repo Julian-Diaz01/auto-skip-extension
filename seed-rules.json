@@ -12,8 +12,8 @@
   {
     "site": "netflix.com",
     "label": "Skip Recap",
-    "matchType": "aria-label",
-    "matchValue": "Skip Recap",
+    "matchType": "data-uia",
+    "matchValue": "player-skip-recap",
     "action": "click",
     "enabled": true,
     "source": "seed"
