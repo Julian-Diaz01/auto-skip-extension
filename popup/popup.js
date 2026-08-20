@@ -146,11 +146,8 @@
 
   // --- Info tooltips ---
 
-  // Wires a small info button to show/hide its adjacent tooltip panel. When
-  // the button lives inside a <summary> (the advanced-help tooltip does),
-  // preventDefault() stops the click from also toggling the parent
-  // <details> — the browser skips a summary's default toggle behavior once
-  // the triggering click event has had preventDefault() called on it.
+  // Toggles an info tooltip. preventDefault() also stops a click from
+  // toggling the parent <details> when the button lives in a <summary>.
   function initTooltip(btn, tip) {
     if (!btn || !tip) return;
     btn.addEventListener('click', (event) => {
@@ -186,13 +183,9 @@
     }
   });
 
-  // Keeps the Advanced disclosure's open/closed state as a remembered user
-  // preference (so power users who like it open don't have to re-expand it
-  // every time) while still letting the picker/edit flows force it open or
-  // closed for context without overwriting that preference. Only a real
-  // user click on the <summary> should update the stored value — every
-  // programmatic `.open = ...` assignment below goes through
-  // setAdvancedOpen(), which flags the resulting 'toggle' event to skip.
+  // Programmatic opens/closes shouldn't overwrite the user's remembered
+  // preference — this flags the resulting 'toggle' event so onAdvancedToggle
+  // skips it. Only a real user click on <summary> should persist the state.
   function setAdvancedOpen(open) {
     advancedToggleIsProgrammatic = true;
     advancedSection.open = open;
@@ -206,13 +199,9 @@
     chrome.storage.local.set({ [ADVANCED_OPEN_STORAGE_KEY]: advancedSection.open });
   }
 
-  // A picker run that finished after this popup instance closed (Chrome
-  // action popups close the moment they lose focus, i.e. as soon as the
-  // user clicks over on the page to pick an element) can't wait for the
-  // user to come back — background.js already auto-saved the best match
-  // and left the result in chrome.storage.local under `pickerPending`.
-  // Pick it up here on every popup open (and via the live
-  // 'picker-auto-saved' nudge if the popup happens to still be open).
+  // background.js already auto-saved the best match to `pickerPending`
+  // (the popup closes before the pick finishes) — pick it up here on every
+  // open, or via the live 'picker-auto-saved' nudge if still open.
   async function checkPendingPickerResult() {
     const { pickerPending } = await chrome.storage.local.get('pickerPending');
     if (!pickerPending) {
@@ -239,9 +228,8 @@
     fieldDataAttrNameLabel.hidden = !isDataAttr;
   }
 
-  // Populates the Help panel's match-type reference from the same
-  // MATCH_TYPE_INFO map the alternative-match tooltips use, so the two
-  // never drift out of sync.
+  // Renders from the same MATCH_TYPE_INFO map the alt-match tooltips use,
+  // so the two stay in sync.
   function renderHelpMatchTypes() {
     const container = document.getElementById('help-match-types');
     if (!container) return;
@@ -288,10 +276,8 @@
   }
 
   function renderOtherSites(rulesBySite) {
-    // renderAll() re-runs on every state change (toggling a rule, renaming,
-    // deleting, ...), and this rebuilds the site-group <details> elements
-    // from scratch each time. Remember which ones the user had open first
-    // so a toggle flip elsewhere doesn't slam every accordion shut.
+    // renderAll() rebuilds these <details> from scratch each time — remember
+    // which were open so a toggle flip elsewhere doesn't shut them all.
     const openSites = new Set();
     otherSitesRulesEl.querySelectorAll('details.site-group[open]').forEach((el) => {
       if (el.dataset.site) openSites.add(el.dataset.site);
@@ -479,10 +465,8 @@
     }
 
     if (message.type === 'picker-auto-saved') {
-      // Only reachable if this popup instance somehow stayed open through
-      // the pick (normally it's already closed by now) — background.js
-      // has finished saving, so just read the same pending record a fresh
-      // popup open would.
+      // Rare: popup stayed open through the pick. background.js has already
+      // saved, so just read the same pending record a fresh open would.
       pickElementBtn.disabled = false;
       hidePickerStatus();
       checkPendingPickerResult();
@@ -523,10 +507,8 @@
     setAdvancedOpen(true);
   }
 
-  // Background.js already auto-saved the best (recommended) match by the
-  // time the popup sees this — this just confirms what happened and, if
-  // other candidates existed, offers them as a "not the right one?"
-  // fallback instead of making the user choose up front.
+  // background.js already auto-saved the best match — this confirms it and
+  // offers other candidates as a "not the right one?" fallback.
   function renderPickerConfirmation(pending) {
     pickerCandidatesEl.innerHTML = '';
     pickerCandidatesEl.hidden = false;
@@ -566,11 +548,9 @@
     pickerCandidatesEl.appendChild(details);
   }
 
-  // Shared row builder for the two "pick a candidate" UIs: the post-save
-  // "not the right one?" alternatives list (updates the already-saved
-  // rule) and the manual-selection list shown up front when "Choose match
-  // manually" is on (creates the rule fresh). They differ only in the
-  // button label and what happens on click.
+  // Shared by the post-save "not the right one?" list (updates the saved
+  // rule) and the manual-selection list (creates one fresh) — they differ
+  // only in button label and click behavior.
   function buildCandidateRow(candidate, { buttonLabel, onUse, recommended }) {
     const row = document.createElement('div');
     row.className = 'alt-match-row';
@@ -653,10 +633,8 @@
     highlightRule(pending.savedRuleId);
   }
 
-  // "Choose match manually" flow: nothing has been saved yet — every
-  // detected candidate is offered up front (first one flagged as the one
-  // background.js would otherwise have auto-saved) and picking one creates
-  // the rule.
+  // "Choose match manually" flow: nothing saved yet — every candidate is
+  // offered up front (first flagged as the one auto-save would've used).
   function renderPickerSelection(pending) {
     const candidates = pending.candidates || [];
 
@@ -705,9 +683,8 @@
     highlightRule(newRule.id);
   }
 
-  // Swaps labelText for an inline input; onCommit is called with the new
-  // value on a real change (used by rule rows to persist the rename
-  // immediately).
+  // Swaps labelText for an inline input; onCommit fires with the new value
+  // on a real change.
   function startLabelEdit(labelLine, labelText, onCommit) {
     const input = document.createElement('input');
     input.type = 'text';

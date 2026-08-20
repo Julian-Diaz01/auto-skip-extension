@@ -1,12 +1,7 @@
-// content/engine.js
-// Rule-driven auto-clicker for "Skip Intro" / "Skip Recap" / "Next Episode"
-// style buttons on Netflix, Prime Video, and Disney+. Loaded as a plain
-// content script (no ES modules) after storage/rules-store.js, so the
-// global `RulesStore` is already available when this file runs.
-//
-// Rules are pure data (see RulesStore for shape) and are never eval'd —
-// this file only ever reads rule fields to build CSS selector strings or
-// to do plain string comparisons.
+// content/engine.js — rule-driven auto-clicker for "Skip Intro" / "Skip
+// Recap" / "Next Episode" buttons. Loaded after storage/rules-store.js
+// (plain script, no ES modules), so `RulesStore` is already global.
+// Rules are pure data and are never eval'd.
 
 const DEBUG = false;
 

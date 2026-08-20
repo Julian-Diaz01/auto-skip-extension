@@ -1,11 +1,6 @@
-// content/picker.js
-//
-// On-demand "element picker" content script. NOT registered in
-// manifest.json's static content_scripts — it is injected on demand via
-// chrome.scripting.executeScript from the popup when the user clicks
-// "Pick element on page". Reads only DOM element attributes of the
-// clicked element and messages the extension's own popup; no eval, no
-// remote code, no network/analytics calls.
+// content/picker.js — on-demand "element picker" content script, injected
+// via chrome.scripting.executeScript from the popup (not in manifest.json's
+// static content_scripts). Reads only DOM attributes; no eval, no network.
 
 (function () {
   'use strict';
@@ -200,13 +195,8 @@
 
     cleanup();
 
-    // The popup that triggered the picker has already closed by now (Chrome
-    // action popups close as soon as they lose focus, which happens the
-    // moment the user clicks over on the page to pick an element) — so a
-    // live chrome.runtime.sendMessage to it has nobody listening. Persist
-    // the result to storage so the popup can pick it up the next time it's
-    // opened, and notify the background service worker so it can badge the
-    // toolbar icon as a "results ready" nudge.
+    // Popup already closed (it closes on focus loss) — persist to storage
+    // for its next open, and notify background.js to badge the toolbar icon.
     chrome.storage.local.set({
       pickerPending: { candidates: candidates, site: location.hostname, ts: Date.now() },
     });

@@ -1,7 +1,5 @@
-// background.js
-// MV3 service worker. Only responsible for seeding default rules on first
-// install — no telemetry, no network calls, no persistent state beyond
-// what rules-store.js already manages in chrome.storage.local.
+// background.js — MV3 service worker: seeds default rules on first install.
+// No telemetry, no persistent state beyond what rules-store.js manages.
 
 importScripts('storage/rules-store.js');
 
@@ -34,14 +32,10 @@ chrome.runtime.onInstalled.addListener(async (details) => {
   }
 });
 
-// The popup that starts an element-pick closes as soon as it loses focus
-// (the moment the user clicks over on the page), so the flow can't wait
-// for the user to come back and confirm a candidate — that's the service
-// worker's job here. It auto-saves the best (first, most durable) match
-// content/picker.js found the instant the pick happens, so the rule is
-// already active whether or not the popup is ever reopened. The full candidate
-// list is kept in `pickerPending` so the popup can offer the runner-up
-// matches (with an explanation of each) as a "not the right one?" fallback.
+// The popup closes the instant the user clicks the page to pick an element,
+// so it can't wait for confirmation — this auto-saves the best candidate
+// immediately. Runner-up candidates are kept in `pickerPending` for the
+// popup's "not the right one?" fallback.
 chrome.runtime.onMessage.addListener((message) => {
   if (!message || typeof message !== 'object') {
     return;
@@ -69,11 +63,8 @@ async function handlePickerResult(message) {
     return;
   }
 
-  // "Choose match manually" is a popup-set preference (chrome.storage.local)
-  // read here because the popup that started the pick is already closed by
-  // the time this runs — see the file-level comment above. When it's on,
-  // skip the auto-save below and let the popup present every candidate for
-  // the user to pick from instead.
+  // Popup already closed, so read this preference from storage. When on,
+  // skip auto-save and let the popup present all candidates instead.
   const { manualSelectEnabled } = await chrome.storage.local.get('manualSelectEnabled');
   if (manualSelectEnabled) {
     await chrome.storage.local.set({
@@ -115,9 +106,7 @@ async function handlePickerResult(message) {
 }
 
 function notifyPopup() {
-  // No popup listening right now is the common case (it's already closed)
-  // — that's fine, it'll pick up `pickerPending` from storage on its next
-  // open. sendMessage rejects (doesn't throw) when there's no receiver, so
-  // this needs a .catch, not a try/catch, to avoid an unhandled rejection.
+  // sendMessage rejects (doesn't throw) with no receiver — catch avoids an
+  // unhandled rejection when the popup (the common case) isn't listening.
   chrome.runtime.sendMessage({ type: 'picker-auto-saved' }).catch(() => {});
 }

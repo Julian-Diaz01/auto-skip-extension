@@ -1,9 +1,6 @@
-// storage/rules-store.js
-// Thin wrapper around chrome.storage.local for rule CRUD.
-// Shared by content scripts (engine.js), the popup, and the background
-// service worker. Loaded as a plain script (no ES modules) so it works
-// both as a content-script include and via importScripts() in the
-// service worker.
+// storage/rules-store.js — thin wrapper around chrome.storage.local for
+// rule CRUD. Plain script (no ES modules) so it works both as a
+// content-script include and via importScripts() in the service worker.
 
 const RULES_STORAGE_KEY = 'rules';
 
@@ -89,9 +86,7 @@ async function toggleRule(id) {
   return updateRule(id, { enabled: !rule.enabled });
 }
 
-// Exposed as a global object (`RulesStore`) since these files are loaded
-// as plain scripts, not ES modules, in both content-script and
-// service-worker contexts.
+// Exposed as a global since these load as plain scripts, not ES modules.
 const RulesStore = {
   RULES_STORAGE_KEY,
   getRules,
